@@ -21,22 +21,20 @@ type Input =
       list: int seq;
    }
  
+[<DataContract>]
 type Output =
    { 
       [<field: DataMember(Name = "result")>]
-      result : int seq;
+      result: int seq;
    }
 
-let sortHandler: Input -> Output = fun i -> { result= [1;2] }
-
-let result = { result= [1;2;3] }
+let sortHandler: Input -> Output =
+    fun input -> { result= qsort (Seq.toList input.list) }
 
 let app = 
   choose
     [ POST >=> choose
         [path "/" >=> Json.mapJson sortHandler]]
-
-
 
 [<EntryPoint>]
 let main argv =
